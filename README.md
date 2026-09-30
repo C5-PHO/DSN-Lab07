@@ -106,6 +106,8 @@ La plantilla [aws/lab07-alb.yaml](aws/lab07-alb.yaml) crea una VPC, dos subredes
 
 La plantilla abre **HTTP 80 al ALB desde Internet**. Los servidores aceptan HTTP solo desde el grupo de seguridad del ALB; no se abre SSH. Este entorno de laboratorio no incluye HTTPS ni datos reales. **ALB, EC2 y otros recursos pueden generar cargos mientras la pila exista.** Despliegue, capturas, pruebas y opciones para conservar o pausar recursos se describen en [guía AWS](docs/aws.md). No se debe afirmar que AWS esté desplegado hasta comprobar sus recursos en la cuenta.
 
+Para presentar el trabajo, seguir el [guion de grabación](docs/video-script.md). Tras guardar el video, eliminar la pila AWS y verificar `DELETE_COMPLETE` para que el ALB deje de consumir crédito; el repositorio permite recrearla cuando se necesite.
+
 ## Pruebas y cierre
 
 ```bash

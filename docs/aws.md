@@ -50,8 +50,8 @@ curl -s http://DNS-DEL-ALB/api/test
 
 **Datos a completar tras el despliegue:** nombre de pila, DNS del ALB, IDs de targets saludables, capturas de rutas, métricas de escalado y hora de eliminación.
 
-## Conservación y pausa de la infraestructura
+## Cierre para no mantener cargos
 
-El usuario ha pedido conservar la infraestructura. Al terminar las pruebas, no basta con detener las instancias web desde EC2: Auto Scaling considera las instancias detenidas como no saludables y las reemplaza. Para pausar la capacidad web sin eliminar la pila, actualizar `lab07-alb` en CloudFormation con `WebMinSize=0` y `WebDesiredCapacity=0`. Esto termina las EC2 web actuales, pero conserva el grupo y su plantilla para volver a `2/2` después. La instancia API no pertenece al grupo y puede detenerse desde EC2; su volumen EBS seguirá teniendo costo.
+Al terminar la grabación y guardar las evidencias, eliminar `lab07-alb` desde **CloudFormation → Stacks → lab07-alb → Delete**. Esperar `DELETE_COMPLETE` y comprobar en EC2 que desaparezcan el ALB, sus tres instancias y el Auto Scaling Group del laboratorio. La plantilla queda en GitHub para recrear el entorno más adelante. No eliminar recursos ajenos a esta pila.
 
-**El ALB no se puede apagar.** Mientras la pila lo conserve, seguirá consumiendo crédito o generando cargos por hora, además de posibles cargos de IPv4 pública y otros recursos. Para detener los cargos del ALB hay que eliminarlo; una opción reversible es eliminar la pila y volver a desplegarla desde esta plantilla cuando se necesite. No eliminar recursos sin la autorización del usuario.
+No basta con detener las instancias web desde EC2: Auto Scaling considera las instancias detenidas como no saludables y las reemplaza. La plantilla permite actualizar `WebMinSize=0` y `WebDesiredCapacity=0` para pausar la capacidad web, pero el ALB seguiría consumiendo crédito por hora y la instancia API tendría que detenerse por separado. Por ello, **la eliminación de la pila es la única opción prevista aquí para detener el consumo del ALB**.
