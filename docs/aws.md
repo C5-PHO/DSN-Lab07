@@ -29,7 +29,7 @@ flowchart LR
     ASG --> AZ2
 ```
 
-Los dos servidores web son gestionados por el Auto Scaling Group (mínimo 2, deseado 2, máximo 4). Una tercera instancia sirve el endpoint de ejemplo `/api/test`. Los checks del Target Group usan `/health` y `/api/health`. El escalado objetivo se configura a CPU media del 50%.
+Los dos servidores web son gestionados por el Auto Scaling Group (mínimo 2, deseado 2, máximo 4 en el despliegue inicial). Una tercera instancia sirve el endpoint de ejemplo `/api/test`. Los checks del Target Group usan `/health` y `/api/health`. El escalado objetivo se configura a CPU media del 50%.
 
 ## Comprobaciones y capturas
 
@@ -50,7 +50,8 @@ curl -s http://DNS-DEL-ALB/api/test
 
 **Datos a completar tras el despliegue:** nombre de pila, DNS del ALB, IDs de targets saludables, capturas de rutas, métricas de escalado y hora de eliminación.
 
-## Limpieza
+## Conservación y pausa de la infraestructura
 
-La pila debe eliminarse al terminar la evidencia para detener los cargos. En **CloudFormation → Stacks → lab07-alb → Delete**, confirmar la eliminación y esperar `DELETE_COMPLETE`. Comprobar después en EC2 que no queden el ALB, instancias ni ASG del laboratorio. Si se crearon recursos manuales fuera de la pila, eliminarlos por separado. Guardar las capturas antes de borrar la pila.
+El usuario ha pedido conservar la infraestructura. Al terminar las pruebas, no basta con detener las instancias web desde EC2: Auto Scaling considera las instancias detenidas como no saludables y las reemplaza. Para pausar la capacidad web sin eliminar la pila, actualizar `lab07-alb` en CloudFormation con `WebMinSize=0` y `WebDesiredCapacity=0`. Esto termina las EC2 web actuales, pero conserva el grupo y su plantilla para volver a `2/2` después. La instancia API no pertenece al grupo y puede detenerse desde EC2; su volumen EBS seguirá teniendo costo.
 
+**El ALB no se puede apagar.** Mientras la pila lo conserve, seguirá consumiendo crédito o generando cargos por hora, además de posibles cargos de IPv4 pública y otros recursos. Para detener los cargos del ALB hay que eliminarlo; una opción reversible es eliminar la pila y volver a desplegarla desde esta plantilla cuando se necesite. No eliminar recursos sin la autorización del usuario.

@@ -7,6 +7,18 @@ Parameters:
     Default: t3.micro
     AllowedValues: [t3.micro, t2.micro]
     Description: Confirm the instance type is eligible for your account before deploying.
+  WebMinSize:
+    Type: Number
+    Default: 2
+    MinValue: 0
+    MaxValue: 4
+    Description: Set to 0 together with WebDesiredCapacity to pause web EC2 capacity.
+  WebDesiredCapacity:
+    Type: Number
+    Default: 2
+    MinValue: 0
+    MaxValue: 4
+    Description: Set to 0 together with WebMinSize to pause web EC2 capacity.
 
 Resources:
   LabVPC:
@@ -135,8 +147,8 @@ Resources:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
       AutoScalingGroupName: lab07-web-asg
-      MinSize: '2'
-      DesiredCapacity: '2'
+      MinSize: !Ref WebMinSize
+      DesiredCapacity: !Ref WebDesiredCapacity
       MaxSize: '4'
       VPCZoneIdentifier: [!Ref PublicSubnetA, !Ref PublicSubnetB]
       LaunchTemplate:

@@ -104,7 +104,7 @@ El script ejecuta 1000 peticiones con concurrencia 50 primero a app1 y luego a N
 
 La plantilla [aws/lab07-alb.yaml](aws/lab07-alb.yaml) crea una VPC, dos subredes públicas en distintas zonas, un ALB, un grupo web con dos instancias iniciales gestionadas por Auto Scaling, un backend API, health checks y una regla `/api/*`. Los servidores AWS muestran sus propios ID y zona; son la demostración del ALB solicitada en la guía complementaria. La aplicación de login y CRUD se demuestra localmente con Nginx y base compartida.
 
-La plantilla abre **HTTP 80 al ALB desde Internet**. Los servidores aceptan HTTP solo desde el grupo de seguridad del ALB; no se abre SSH. Este entorno de laboratorio no incluye HTTPS ni datos reales. **ALB, EC2 y otros recursos pueden generar cargos mientras la pila exista.** Despliegue, capturas, pruebas y eliminación se describen en [guía AWS](docs/aws.md). No se debe afirmar que AWS esté desplegado hasta comprobar sus recursos en la cuenta.
+La plantilla abre **HTTP 80 al ALB desde Internet**. Los servidores aceptan HTTP solo desde el grupo de seguridad del ALB; no se abre SSH. Este entorno de laboratorio no incluye HTTPS ni datos reales. **ALB, EC2 y otros recursos pueden generar cargos mientras la pila exista.** Despliegue, capturas, pruebas y opciones para conservar o pausar recursos se describen en [guía AWS](docs/aws.md). No se debe afirmar que AWS esté desplegado hasta comprobar sus recursos en la cuenta.
 
 ## Pruebas y cierre
 
@@ -117,4 +117,3 @@ docker compose down
 `docker compose down` detiene los contenedores y conserva el volumen de datos. Eliminar el volumen requiere `docker compose down -v` y borra los registros del laboratorio.
 
 **Conclusiones:** (1) El balanceador reparte solicitudes y mantiene el servicio si un backend falla. (2) Una sesión firmada y un almacén compartido permiten que el login y el CRUD funcionen al cambiar de servidor. (3) Un ALB con dos zonas, checks y Auto Scaling ofrece más capacidad de recuperación y elasticidad que un único Nginx local, con mayor costo y complejidad operativa.
-
