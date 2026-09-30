@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.py[cod]
+.coverage
+.pytest_cache/
+*.sqlite3
+*.sqlite3-*
+evidence/
+
