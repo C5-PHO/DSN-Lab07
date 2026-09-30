@@ -1,0 +1,10 @@
+.git
+.env
+__pycache__
+*.pyc
+tests
+docs
+aws
+scripts
+README.md
+evidence

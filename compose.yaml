@@ -1,0 +1,66 @@
+x-backend: &backend
+  build: .
+  environment:
+    DB_PATH: /data/lab07.sqlite3
+    ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@lab07.local}
+    ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Lab07Demo!}
+    SESSION_SECRET: ${SESSION_SECRET:-local-lab07-shared-secret-change-before-deploying}
+  volumes:
+    - lab_data:/data
+  healthcheck:
+    test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=2)"]
+    interval: 10s
+    timeout: 3s
+    retries: 3
+    start_period: 15s
+  restart: unless-stopped
+
+services:
+  app1:
+    <<: *backend
+    environment:
+      DB_PATH: /data/lab07.sqlite3
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@lab07.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Lab07Demo!}
+      SESSION_SECRET: ${SESSION_SECRET:-local-lab07-shared-secret-change-before-deploying}
+      INSTANCE_ID: app1
+    ports:
+      - "127.0.0.1:8081:8080"
+  app2:
+    <<: *backend
+    environment:
+      DB_PATH: /data/lab07.sqlite3
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@lab07.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Lab07Demo!}
+      SESSION_SECRET: ${SESSION_SECRET:-local-lab07-shared-secret-change-before-deploying}
+      INSTANCE_ID: app2
+    ports:
+      - "127.0.0.1:8082:8080"
+  app3:
+    <<: *backend
+    environment:
+      DB_PATH: /data/lab07.sqlite3
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@lab07.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Lab07Demo!}
+      SESSION_SECRET: ${SESSION_SECRET:-local-lab07-shared-secret-change-before-deploying}
+      INSTANCE_ID: app3
+    ports:
+      - "127.0.0.1:8083:8080"
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    depends_on:
+      app1:
+        condition: service_healthy
+      app2:
+        condition: service_healthy
+      app3:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:80"
+    restart: unless-stopped
+
+volumes:
+  lab_data:
+
